@@ -1,0 +1,127 @@
+nohup: ignoring input
+[bench] motifd-sim on 127.0.0.1:45975 token=set
+[bench] === profile direct ===
+[bench] direct: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (46.6s)
+[bench] === profile standard ===
+[bench] standard: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (46.5s)
+[bench] === profile tinybuf ===
+[bench] tinybuf: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (46.8s)
+[bench] === profile laggy ===
+[bench] laggy: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (49.0s)
+[bench] === profile lossy ===
+[bench] lossy: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (72.2s)
+[bench] === profile nohalf ===
+[bench] nohalf: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (48.6s)
+[bench] wrote /home/yuchen_wang/workspace/crossdesk/probe/sim/reports/fast-9cde57bd.json (75618 bytes)
+{
+  "direct": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 0.608,
+    "rtt_p95": 0.941,
+    "raw_mbps": 52.703,
+    "framed_mbps": 32.277,
+    "pipelined_ok": null,
+    "close_semantics": "pass",
+    "findings": []
+  },
+  "standard": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 1.516,
+    "rtt_p95": 2.072,
+    "raw_mbps": 55.738,
+    "framed_mbps": 32.429,
+    "pipelined_ok": "pass",
+    "close_semantics": "pass",
+    "findings": []
+  },
+  "tinybuf": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 1.634,
+    "rtt_p95": 2.317,
+    "raw_mbps": 7.34,
+    "framed_mbps": 14.349,
+    "pipelined_ok": "pass",
+    "close_semantics": "pass",
+    "findings": [
+      "F2_small_read_buffer"
+    ]
+  },
+  "laggy": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 2.188,
+    "rtt_p95": 2.741,
+    "raw_mbps": 1.878,
+    "framed_mbps": 1.856,
+    "pipelined_ok": "pass",
+    "close_semantics": "pass",
+    "findings": [
+      "F3_relay_throughput_ceiling"
+    ]
+  },
+  "lossy": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 1.678,
+    "rtt_p95": 2.209,
+    "raw_mbps": 45.997,
+    "framed_mbps": 24.637,
+    "pipelined_ok": "fail",
+    "close_semantics": "pass",
+    "findings": [
+      "F1_pipelining_breaks_on_naive_proxy"
+    ]
+  },
+  "nohalf": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 1.676,
+    "rtt_p95": 2.257,
+    "raw_mbps": 42.902,
+    "framed_mbps": 20.402,
+    "pipelined_ok": "pass",
+    "close_semantics": "fail",
+    "findings": [
+      "F4_half_close_not_propagated"
+    ]
+  }
+}
