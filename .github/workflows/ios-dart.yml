@@ -72,6 +72,13 @@ jobs:
       # Development Team（实测报 "requires a selected Development Team with a
       # Provisioning Profile"），尽管 Xcode build 已经成功了 28 秒。
       # 所以这里只让 flutter 生成配置，真正的编译交给 xcodebuild 并把签名全关掉。
+      - name: 清空 DEVELOPMENT_TEAM（免费账号/CI 上都没有 team）
+        working-directory: probe/ios-connect
+        run: |
+          PBX=ios/Runner.xcodeproj/project.pbxproj
+          grep -c 'DEVELOPMENT_TEAM' "$PBX" || true
+          sed -i '' -E 's/DEVELOPMENT_TEAM = [^;]+;/DEVELOPMENT_TEAM = "";/g' "$PBX"
+          grep -n 'DEVELOPMENT_TEAM' "$PBX" | head -5 || true
       - name: 编译（xcodebuild 直编，全关签名）
         working-directory: probe/ios-connect
         run: |
