@@ -1,0 +1,691 @@
+{
+  "schema": "crossdesk.p0b.probe/1",
+  "tag": "smoke",
+  "run_id": "smoke-e8f48e9b",
+  "generated_at": "2026-11-08T15:27:55+08:00",
+  "harness": {
+    "kind": "sim",
+    "name": "python3",
+    "python": "3.10.12",
+    "os": "Linux-6.18.33.2-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "cpu_count": 12
+  },
+  "config": {
+    "b1_requests": 5,
+    "b2_seconds": 3.0,
+    "b3_bytes": 65536,
+    "b3_frame": 16384,
+    "b3_payloads": [
+      "random"
+    ],
+    "b4_cycles": 1,
+    "ping_interval_s": 20.0,
+    "token_configured": true
+  },
+  "profiles": [
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "standard",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:27:55+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 46053,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "standard",
+        "buf_size": 65536,
+        "listen_port": 45717,
+        "stats": {
+          "tunnels": 30,
+          "up_bytes": 136688,
+          "down_bytes": 142479,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 105
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "requests": 5,
+          "ok": 5,
+          "errors": 0,
+          "latency_ms": {
+            "n": 5,
+            "min": 1.337,
+            "p50": 1.567,
+            "p95": 1.816,
+            "p99": 1.861,
+            "max": 1.872,
+            "mean": 1.573
+          },
+          "ttfb_ms": {
+            "n": 5,
+            "min": 1.316,
+            "p50": 1.549,
+            "p95": 1.798,
+            "p99": 1.842,
+            "max": 1.853,
+            "mean": 1.554
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 5.39
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 4.84
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 9.84
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-d8509f",
+                "last_seq": 42,
+                "ptys": 1
+              },
+              "ms": 4.93
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 5.08
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-2"
+              },
+              "ms": 10.4
+            }
+          }
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 3.0,
+          "upgrade_ms": 1.549,
+          "events": 13,
+          "pings": 0,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.355,
+          "inter_event_ms": {
+            "n": 12,
+            "min": 262.185,
+            "p50": 262.932,
+            "p95": 263.657,
+            "p99": 263.756,
+            "max": 263.781,
+            "mean": 262.991
+          },
+          "elapsed_s": 3.16
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65536,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 3.076,
+              "p50": 3.315,
+              "p95": 3.477,
+              "p99": 3.498,
+              "max": 3.503,
+              "mean": 3.302
+            },
+            "throughput_mbps": 148.622,
+            "elapsed_s": 0.0044,
+            "meta_ms": 0.007,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0044
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65540,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 3.435,
+              "p50": 3.687,
+              "p95": 4.016,
+              "p99": 4.062,
+              "max": 4.074,
+              "mean": 3.721
+            },
+            "throughput_mbps": 63.585,
+            "elapsed_s": 0.0049,
+            "meta_ms": 0.021,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0049
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 2,
+          "total": 2
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 1,
+          "observed_409": 1,
+          "recovered": 1,
+          "reattach_ms": {
+            "n": 1,
+            "min": 12.61,
+            "p50": 12.61,
+            "p95": 12.61,
+            "p99": 12.61,
+            "max": 12.61,
+            "mean": 12.61
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 2.496,
+            "p50": 3.732,
+            "p95": 3.999,
+            "p99": 4.011,
+            "max": 4.014,
+            "mean": 3.471
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 4.237,
+            "p50": 4.956,
+            "p95": 5.527,
+            "p99": 5.568,
+            "max": 5.578,
+            "mean": 4.995
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 2.36,
+            "p50": 3.498,
+            "p95": 3.833,
+            "p99": 3.849,
+            "max": 3.853,
+            "mean": 3.217
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 3.833,
+            "p50": 4.185,
+            "p95": 5.153,
+            "p99": 5.339,
+            "max": 5.386,
+            "mean": 4.32
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 5,
+          "min": 1.337,
+          "p50": 1.567,
+          "p95": 1.816,
+          "p99": 1.861,
+          "max": 1.872,
+          "mean": 1.573
+        },
+        "rpc_ttfb_ms": {
+          "n": 5,
+          "min": 1.316,
+          "p50": 1.549,
+          "p95": 1.798,
+          "p99": 1.842,
+          "max": 1.853,
+          "mean": 1.554
+        },
+        "ws_upgrade_ms": 1.549,
+        "pty_throughput_mbps_raw": 148.622,
+        "pty_first_byte_ms_raw": 0.007,
+        "pty_throughput_mbps_framed": 63.585,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 5,
+        "server_events_sent": 15,
+        "server_pings_sent": 0,
+        "server_pongs_recv": 0,
+        "server_pty_conns": 2,
+        "server_pty_bytes_up": 131072,
+        "server_pty_bytes_down": 131072,
+        "server_401": 1,
+        "server_409": 2
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "wall_clock_s": 3.4
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "lossy",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:27:58+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 46053,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "lossy",
+        "buf_size": 65536,
+        "lossy": true,
+        "listen_port": 45241,
+        "stats": {
+          "tunnels": 30,
+          "up_bytes": 136428,
+          "down_bytes": 142464,
+          "connect_errors": 0,
+          "discarded_bytes": 260,
+          "relay_chunks": 95
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "requests": 5,
+          "ok": 5,
+          "errors": 0,
+          "latency_ms": {
+            "n": 5,
+            "min": 0.934,
+            "p50": 1.09,
+            "p95": 1.255,
+            "p99": 1.274,
+            "max": 1.279,
+            "mean": 1.081
+          },
+          "ttfb_ms": {
+            "n": 5,
+            "min": 0.912,
+            "p50": 1.059,
+            "p95": 1.237,
+            "p99": 1.257,
+            "max": 1.261,
+            "mean": 1.06
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 4.99
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 4.99
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 10.05
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-17c03e",
+                "last_seq": 42,
+                "ptys": 2
+              },
+              "ms": 5.62
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 4.55
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-3"
+              },
+              "ms": 9.33
+            }
+          }
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 3.0,
+          "upgrade_ms": 1.557,
+          "events": 13,
+          "pings": 0,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.302,
+          "inter_event_ms": {
+            "n": 12,
+            "min": 262.204,
+            "p50": 263.213,
+            "p95": 263.649,
+            "p99": 263.828,
+            "max": 263.872,
+            "mean": 263.069
+          },
+          "elapsed_s": 3.16
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65536,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 2.971,
+              "p50": 3.12,
+              "p95": 3.164,
+              "p99": 3.168,
+              "max": 3.169,
+              "mean": 3.095
+            },
+            "throughput_mbps": 146.765,
+            "elapsed_s": 0.0038,
+            "meta_ms": 0.036,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0038
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65540,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 3.425,
+              "p50": 3.595,
+              "p95": 3.63,
+              "p99": 3.63,
+              "max": 3.63,
+              "mean": 3.561
+            },
+            "throughput_mbps": 140.405,
+            "elapsed_s": 0.0043,
+            "meta_ms": 0.009,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0043
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 2,
+          "total": 2
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 1,
+          "observed_409": 1,
+          "recovered": 1,
+          "reattach_ms": {
+            "n": 1,
+            "min": 7.96,
+            "p50": 7.96,
+            "p95": 7.96,
+            "p99": 7.96,
+            "max": 7.96,
+            "mean": 7.96
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 2.464,
+            "p50": 3.153,
+            "p95": 3.823,
+            "p99": 3.931,
+            "max": 3.958,
+            "mean": 3.169
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 3.872,
+            "p50": 4.922,
+            "p95": 5.367,
+            "p99": 5.453,
+            "max": 5.474,
+            "mean": 4.752
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "fail",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 0
+          },
+          "first_response_ms": {
+            "n": 0
+          },
+          "errors": 5,
+          "error_notes": [
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out"
+          ]
+        },
+        "rpc_rtt_ms": {
+          "n": 5,
+          "min": 0.934,
+          "p50": 1.09,
+          "p95": 1.255,
+          "p99": 1.274,
+          "max": 1.279,
+          "mean": 1.081
+        },
+        "rpc_ttfb_ms": {
+          "n": 5,
+          "min": 0.912,
+          "p50": 1.059,
+          "p95": 1.237,
+          "p99": 1.257,
+          "max": 1.261,
+          "mean": 1.06
+        },
+        "ws_upgrade_ms": 1.557,
+        "pty_throughput_mbps_raw": 146.765,
+        "pty_first_byte_ms_raw": 0.036,
+        "pty_throughput_mbps_framed": 140.405,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 5,
+        "server_events_sent": 15,
+        "server_pings_sent": 0,
+        "server_pongs_recv": 0,
+        "server_pty_conns": 2,
+        "server_pty_bytes_up": 131072,
+        "server_pty_bytes_down": 131072,
+        "server_401": 1,
+        "server_409": 2
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "wall_clock_s": 28.4
+    }
+  ],
+  "summary": {
+    "standard": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.567,
+      "rtt_p95": 1.816,
+      "raw_mbps": 148.622,
+      "framed_mbps": 63.585
+    },
+    "lossy": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.09,
+      "rtt_p95": 1.255,
+      "raw_mbps": 146.765,
+      "framed_mbps": 140.405
+    }
+  }
+}
