@@ -1,0 +1,73 @@
+# Linux 上编不出 iOS 应用——这是 Apple 的 SDK/签名闭包决定的，不是工具链问题。
+# 正确做法：把"需要 macOS"的那一段交给 GitHub 的 macOS runner，本地/Linux 只做纯 Dart 校验。
+#
+# 本流水线两档：
+#   1) dart-analyze (ubuntu)  —— 纯 Dart 部分（wire.dart / probe.dart / bin），秒级，拦类型错误
+#   2) ios-nocodesign (macos) —— Flutter iOS 真编译，但**不签名**，只验证能编过
+#
+# 免费额度：公开仓库不限；私有仓库 macOS runner 计费倍率高于 Linux，按需开启。
+name: ios-dart
+
+on:
+  push:
+    paths:
+      - 'probe/ios-connect/**'
+      - '.github/workflows/ios-dart.yml'
+  workflow_dispatch:
+
+jobs:
+  dart-analyze:
+    name: Dart 静态分析（纯 Dart 部分）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: 只分析不依赖 flutter 的文件
+        working-directory: probe/ios-connect
+        run: |
+          dart --version
+          # 完整工程依赖 flutter SDK，这里用"最小 pubspec"隔离纯 Dart 子集：
+          # 只要 wire.dart / probe.dart 仍然不 import flutter，就能这样验。
+          mkdir -p /tmp/dartonly/lib/src /tmp/dartonly/bin
+          cp lib/src/wire.dart lib/src/probe.dart /tmp/dartonly/lib/src/
+          cp bin/probe.dart /tmp/dartonly/bin/
+          cp pubspec.yaml /tmp/dartonly/pubspec.dartonly
+          cd /tmp/dartonly
+          cat > pubspec.yaml <<'YAML'
+          name: ios_connect_probe
+          environment:
+            sdk: '>=3.0.0 <4.0.0'
+          dependencies:
+            crypto: ^3.0.3
+          YAML
+          dart pub get
+          dart analyze --fatal-infos
+
+  ios-nocodesign:
+    name: Flutter iOS 编译（macOS runner，不签名）
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: flutter doctor
+        run: flutter doctor -v
+      - name: 编译（不签名）
+        working-directory: probe/ios-connect
+        run: |
+          flutter pub get
+          flutter build ios --no-codesign --release
+      - name: 产物信息
+        working-directory: probe/ios-connect
+        run: |
+          ls -la build/ios/iphoneos/ || true
+          du -sh build/ios/iphoneos/Runner.app 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Runner-nocodesign
+          path: probe/ios-connect/build/ios/iphoneos/Runner.app
+          if-no-files-found: warn
