@@ -1,0 +1,17 @@
+[package]
+name = "crossdesk-mesh"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "crossdesk overlay 抽象层：netbird-embed 的 5 方法白名单（P0-A）"
+
+[lib]
+name = "crossdesk_mesh"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow.workspace = true
+netbird-embed.workspace = true   # 版本锁死在根 workspace（=0.3.1），本文件不得改写版本
+serde.workspace = true           # MeshStatus / Peer 需要 Serialize 给 motif-probe 出报告
+tracing.workspace = true
