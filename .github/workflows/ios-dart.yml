@@ -68,18 +68,40 @@ jobs:
           # NetBird userspace 需要访问本地网络，iOS 14+ 必须声明用途
           /usr/libexec/PlistBuddy -c "Add :NSLocalNetworkUsageDescription string 'crossdesk 需要访问本地网络以建立 NetBird 隧道'" ios/Runner/Info.plist || true
           /usr/libexec/PlistBuddy -c "Print :NSLocalNetworkUsageDescription" ios/Runner/Info.plist || true
-      - name: 编译（不签名）
+      # 注：`flutter build ios --no-codesign` 在 Flutter 3.47 上**仍会**要求
+      # Development Team（实测报 "requires a selected Development Team with a
+      # Provisioning Profile"），尽管 Xcode build 已经成功了 28 秒。
+      # 所以这里只让 flutter 生成配置，真正的编译交给 xcodebuild 并把签名全关掉。
+      - name: 编译（xcodebuild 直编，全关签名）
         working-directory: probe/ios-connect
         run: |
           flutter pub get
-          flutter build ios --no-codesign --release
+          flutter precache --ios
+          flutter build ios --config-only --release --no-codesign || true
+          set -o pipefail
+          xcodebuild \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios_dd \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            EXPANDED_CODE_SIGN_IDENTITY="" \
+            build | tail -40
       - name: 产物信息
         working-directory: probe/ios-connect
         run: |
-          ls -la build/ios/iphoneos/ || true
-          du -sh build/ios/iphoneos/Runner.app 2>/dev/null || true
+          APP=$(find build/ios_dd -name 'Runner.app' -maxdepth 6 | head -1)
+          echo "APP=$APP"
+          ls -la "$APP" | head -20 || true
+          du -sh "$APP" || true
+          echo "--- 架构 ---"
+          lipo -info "$APP/Runner" || true
       - uses: actions/upload-artifact@v4
         with:
           name: Runner-nocodesign
-          path: probe/ios-connect/build/ios/iphoneos/Runner.app
+          path: probe/ios-connect/build/ios_dd/**/Runner.app
           if-no-files-found: warn
