@@ -1,0 +1,14 @@
+# 本机没有 flutter/dart（见 docs/plan-v3.md §6.1），此文件在交付机上未生效，
+# 只作为真机开发时的静态检查口径。
+analyzer:
+  language:
+    strict-casts: false
+    strict-raw-types: false
+  errors:
+    unused_import: warning
+    unused_local_variable: warning
+
+linter:
+  rules:
+    - avoid_print
+    - prefer_final_locals
