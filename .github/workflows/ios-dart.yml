@@ -56,6 +56,18 @@ jobs:
           cache: true
       - name: flutter doctor
         run: flutter doctor -v
+      # 仓库里只有 lib/ 与 bin/，没有 ios/ 工程壳（在 Linux 上生成不了）。
+      # macOS runner 自带 Flutter SDK，所以在这一步补齐：它只新增 ios/ 等平台目录，
+      # 不动已有的 lib/ 与 pubspec.yaml 的依赖段。
+      - name: 生成 iOS 工程壳
+        working-directory: probe/ios-connect
+        run: |
+          flutter create --platforms=ios --org com.crossdesk --project-name ios_connect_probe .
+          echo "--- 生成后的 ios/ 结构 ---"
+          ls -la ios/ || true
+          # NetBird userspace 需要访问本地网络，iOS 14+ 必须声明用途
+          /usr/libexec/PlistBuddy -c "Add :NSLocalNetworkUsageDescription string 'crossdesk 需要访问本地网络以建立 NetBird 隧道'" ios/Runner/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Print :NSLocalNetworkUsageDescription" ios/Runner/Info.plist || true
       - name: 编译（不签名）
         working-directory: probe/ios-connect
         run: |
