@@ -1,0 +1,2588 @@
+{
+  "schema": "crossdesk.p0b.probe/1",
+  "tag": "fast",
+  "run_id": "fast-9cde57bd",
+  "generated_at": "2026-11-08T15:29:39+08:00",
+  "harness": {
+    "kind": "sim",
+    "name": "python3",
+    "python": "3.10.12",
+    "os": "Linux-6.18.33.2-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "cpu_count": 12
+  },
+  "config": {
+    "b1_requests": 200,
+    "b2_seconds": 45.0,
+    "b3_bytes": 1048576,
+    "b3_frame": 65536,
+    "b3_payloads": [
+      "random",
+      "tui"
+    ],
+    "b4_cycles": 3,
+    "ping_interval_s": 20.0,
+    "token_configured": true
+  },
+  "profiles": [
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "direct",
+      "profile_kind": "direct",
+      "generated_at": "2026-11-08T15:29:39+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": null,
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 0.33,
+            "p50": 0.608,
+            "p95": 0.941,
+            "p99": 1.073,
+            "max": 1.223,
+            "mean": 0.632
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 0.32,
+            "p50": 0.593,
+            "p95": 0.924,
+            "p99": 1.043,
+            "max": 1.202,
+            "mean": 0.614
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 1.96,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 1.65,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 4.59,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-f3c616",
+                "last_seq": 42,
+                "ptys": 1
+              },
+              "ms": 2.3
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 2.49,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-2"
+              },
+              "ms": 3.05,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 0.831,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 174,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.409,
+          "inter_event_ms": {
+            "n": 173,
+            "min": 100.93,
+            "p50": 262.785,
+            "p95": 263.621,
+            "p99": 265.715,
+            "max": 270.486,
+            "mean": 261.163
+          },
+          "elapsed_s": 45.18
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 6.474,
+              "p50": 12.075,
+              "p95": 13.622,
+              "p99": 13.803,
+              "max": 13.848,
+              "mean": 11.199
+            },
+            "throughput_mbps": 52.703,
+            "elapsed_s": 0.027,
+            "meta_ms": 0.024,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.027
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 10.192,
+              "p50": 22.009,
+              "p95": 31.176,
+              "p99": 32.129,
+              "max": 32.367,
+              "mean": 20.957
+            },
+            "throughput_mbps": 32.277,
+            "elapsed_s": 0.0415,
+            "meta_ms": 0.038,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0415
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 7.004,
+              "p50": 9.918,
+              "p95": 13.384,
+              "p99": 13.749,
+              "max": 13.84,
+              "mean": 9.974
+            },
+            "throughput_mbps": 66.457,
+            "elapsed_s": 0.0223,
+            "meta_ms": 0.014,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0223
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 6.649,
+              "p50": 10.073,
+              "p95": 12.14,
+              "p99": 12.25,
+              "max": 12.277,
+              "mean": 10.124
+            },
+            "throughput_mbps": 55.634,
+            "elapsed_s": 0.025,
+            "meta_ms": 0.414,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.025
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 4.5,
+            "p50": 5.25,
+            "p95": 5.84,
+            "p99": 5.9,
+            "max": 5.91,
+            "mean": 5.22
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "direct_connect": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 0.912,
+            "p50": 0.999,
+            "p95": 1.756,
+            "p99": 1.898,
+            "max": 1.933,
+            "mean": 1.172
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 2.234,
+            "p50": 2.259,
+            "p95": 3.572,
+            "p99": 3.789,
+            "max": 3.843,
+            "mean": 2.616
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 0.33,
+          "p50": 0.608,
+          "p95": 0.941,
+          "p99": 1.073,
+          "max": 1.223,
+          "mean": 0.632
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 0.32,
+          "p50": 0.593,
+          "p95": 0.924,
+          "p99": 1.043,
+          "max": 1.202,
+          "mean": 0.614
+        },
+        "ws_upgrade_ms": 0.831,
+        "pty_throughput_mbps_raw": 52.703,
+        "pty_first_byte_ms_raw": 0.024,
+        "pty_throughput_mbps_framed": 32.277,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 180,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "pass",
+          "eof_ms": 1.63,
+          "errors": []
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": false,
+          "detail": "本 profile 的代理不丢流水线字节（或被测路径直连），未复现。"
+        }
+      ],
+      "wall_clock_s": 46.6
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "standard",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:30:26+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "standard",
+        "buf_size": 65536,
+        "listen_port": 46063,
+        "stats": {
+          "tunnels": 45,
+          "up_bytes": 4224519,
+          "down_bytes": 3294518,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 850
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 1.017,
+            "p50": 1.516,
+            "p95": 2.072,
+            "p99": 2.395,
+            "max": 2.567,
+            "mean": 1.554
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 1.001,
+            "p50": 1.474,
+            "p95": 2.027,
+            "p99": 2.366,
+            "max": 2.536,
+            "mean": 1.521
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 5.85,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 6.82,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 11.39,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-53fc7c",
+                "last_seq": 42,
+                "ptys": 2
+              },
+              "ms": 6.15
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 5.09,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-3"
+              },
+              "ms": 11.68,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 2.913,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 173,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.278,
+          "inter_event_ms": {
+            "n": 172,
+            "min": 222.01,
+            "p50": 262.899,
+            "p95": 263.808,
+            "p99": 264.099,
+            "max": 264.568,
+            "mean": 262.726
+          },
+          "elapsed_s": 45.19
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 10.468,
+              "p50": 13.853,
+              "p95": 18.307,
+              "p99": 18.821,
+              "max": 18.95,
+              "mean": 14.488
+            },
+            "throughput_mbps": 55.738,
+            "elapsed_s": 0.0288,
+            "meta_ms": 0.029,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0288
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 13.336,
+              "p50": 23.213,
+              "p95": 34.043,
+              "p99": 35.456,
+              "max": 35.809,
+              "mean": 23.558
+            },
+            "throughput_mbps": 32.429,
+            "elapsed_s": 0.0449,
+            "meta_ms": 0.011,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0449
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 12.289,
+              "p50": 16.23,
+              "p95": 17.847,
+              "p99": 18.129,
+              "max": 18.199,
+              "mean": 15.97
+            },
+            "throughput_mbps": 66.605,
+            "elapsed_s": 0.0276,
+            "meta_ms": 0.009,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0276
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 8.389,
+              "p50": 13.981,
+              "p95": 17.36,
+              "p99": 18.143,
+              "max": 18.339,
+              "mean": 13.936
+            },
+            "throughput_mbps": 58.412,
+            "elapsed_s": 0.0258,
+            "meta_ms": 0.354,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0258
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 11.84,
+            "p50": 11.93,
+            "p95": 13.72,
+            "p99": 13.88,
+            "max": 13.92,
+            "mean": 12.56
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.513,
+            "p50": 4.098,
+            "p95": 4.486,
+            "p99": 4.532,
+            "max": 4.544,
+            "mean": 4.068
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 4.822,
+            "p50": 5.773,
+            "p95": 6.054,
+            "p99": 6.091,
+            "max": 6.1,
+            "mean": 5.661
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 2.824,
+            "p50": 3.323,
+            "p95": 4.174,
+            "p99": 4.19,
+            "max": 4.194,
+            "mean": 3.532
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 3.984,
+            "p50": 4.881,
+            "p95": 5.594,
+            "p99": 5.675,
+            "max": 5.695,
+            "mean": 4.828
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 1.017,
+          "p50": 1.516,
+          "p95": 2.072,
+          "p99": 2.395,
+          "max": 2.567,
+          "mean": 1.554
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 1.001,
+          "p50": 1.474,
+          "p95": 2.027,
+          "p99": 2.366,
+          "max": 2.536,
+          "mean": 1.521
+        },
+        "ws_upgrade_ms": 2.913,
+        "pty_throughput_mbps_raw": 55.738,
+        "pty_first_byte_ms_raw": 0.029,
+        "pty_throughput_mbps_framed": 32.429,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 179,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "pass",
+          "eof_ms": 1.03,
+          "errors": []
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": false,
+          "detail": "本 profile 的代理不丢流水线字节（或被测路径直连），未复现。"
+        }
+      ],
+      "wall_clock_s": 46.5
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "tinybuf",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:31:12+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "tinybuf",
+        "buf_size": 1024,
+        "listen_port": 45191,
+        "stats": {
+          "tunnels": 45,
+          "up_bytes": 4224519,
+          "down_bytes": 3296068,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 7964
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 1.046,
+            "p50": 1.634,
+            "p95": 2.317,
+            "p99": 2.656,
+            "max": 3.033,
+            "mean": 1.672
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 1.027,
+            "p50": 1.609,
+            "p95": 2.293,
+            "p99": 2.626,
+            "max": 3.003,
+            "mean": 1.645
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 5.57,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 5.35,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 12.83,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-72cdac",
+                "last_seq": 42,
+                "ptys": 3
+              },
+              "ms": 5.36
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 5.26,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-4"
+              },
+              "ms": 11.56,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 2.61,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 173,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.539,
+          "inter_event_ms": {
+            "n": 172,
+            "min": 80.705,
+            "p50": 263.082,
+            "p95": 264.01,
+            "p99": 264.426,
+            "max": 265.819,
+            "mean": 262.049
+          },
+          "elapsed_s": 45.07
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 24.186,
+              "p50": 103.915,
+              "p95": 130.526,
+              "p99": 133.962,
+              "max": 134.82,
+              "mean": 92.262
+            },
+            "throughput_mbps": 7.34,
+            "elapsed_s": 0.1608,
+            "meta_ms": 0.199,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.1608
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 16.518,
+              "p50": 62.733,
+              "p95": 73.034,
+              "p99": 74.432,
+              "max": 74.782,
+              "mean": 54.34
+            },
+            "throughput_mbps": 14.349,
+            "elapsed_s": 0.0865,
+            "meta_ms": 0.097,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0865
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 25.626,
+              "p50": 91.569,
+              "p95": 126.862,
+              "p99": 127.356,
+              "max": 127.48,
+              "mean": 86.185
+            },
+            "throughput_mbps": 8.819,
+            "elapsed_s": 0.1394,
+            "meta_ms": 0.261,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.1394
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 12.404,
+              "p50": 26.702,
+              "p95": 31.701,
+              "p99": 33.839,
+              "max": 34.374,
+              "mean": 24.934
+            },
+            "throughput_mbps": 28.243,
+            "elapsed_s": 0.0482,
+            "meta_ms": 0.012,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0482
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 12.02,
+            "p50": 12.14,
+            "p95": 13.02,
+            "p99": 13.1,
+            "max": 13.12,
+            "mean": 12.42
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 4.048,
+            "p50": 4.94,
+            "p95": 5.191,
+            "p99": 5.222,
+            "max": 5.229,
+            "mean": 4.703
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.418,
+            "p50": 6.432,
+            "p95": 8.077,
+            "p99": 8.285,
+            "max": 8.337,
+            "mean": 6.665
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.876,
+            "p50": 4.481,
+            "p95": 5.158,
+            "p99": 5.29,
+            "max": 5.323,
+            "mean": 4.433
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.023,
+            "p50": 5.921,
+            "p95": 6.551,
+            "p99": 6.59,
+            "max": 6.6,
+            "mean": 5.939
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 1.046,
+          "p50": 1.634,
+          "p95": 2.317,
+          "p99": 2.656,
+          "max": 3.033,
+          "mean": 1.672
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 1.027,
+          "p50": 1.609,
+          "p95": 2.293,
+          "p99": 2.626,
+          "max": 3.003,
+          "mean": 1.645
+        },
+        "ws_upgrade_ms": 2.61,
+        "pty_throughput_mbps_raw": 7.34,
+        "pty_first_byte_ms_raw": 0.199,
+        "pty_throughput_mbps_framed": 14.349,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 179,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "pass",
+          "eof_ms": 1.35,
+          "errors": []
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": false,
+          "detail": "本 profile 的代理不丢流水线字节（或被测路径直连），未复现。"
+        },
+        {
+          "id": "F2_small_read_buffer",
+          "severity": "info",
+          "found": true,
+          "detail": "1 KiB 读缓冲的代理下，B1/B2/B3 全部通过 → 客户端不依赖『一次 read 恰等于一个 WS 帧』，帧边界跨 recv 拼接正确。"
+        }
+      ],
+      "wall_clock_s": 46.8
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "laggy",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:31:59+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "laggy",
+        "buf_size": 4096,
+        "chunk_delay_ms": 2.0,
+        "listen_port": 45549,
+        "stats": {
+          "tunnels": 45,
+          "up_bytes": 4224519,
+          "down_bytes": 3297625,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 2519
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 1.724,
+            "p50": 2.188,
+            "p95": 2.741,
+            "p99": 2.989,
+            "max": 3.513,
+            "mean": 2.22
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 1.696,
+            "p50": 2.15,
+            "p95": 2.687,
+            "p99": 2.94,
+            "max": 3.468,
+            "mean": 2.184
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 6.4,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 5.6,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 13.03,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-9b39f8",
+                "last_seq": 42,
+                "ptys": 4
+              },
+              "ms": 7.44
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 6.42,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-5"
+              },
+              "ms": 13.27,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 2.214,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 173,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 2.363,
+          "inter_event_ms": {
+            "n": 172,
+            "min": 161.504,
+            "p50": 262.892,
+            "p95": 263.789,
+            "p99": 264.569,
+            "max": 264.722,
+            "mean": 262.347
+          },
+          "elapsed_s": 45.13
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 74.715,
+              "p50": 335.324,
+              "p95": 408.107,
+              "p99": 408.93,
+              "max": 409.136,
+              "mean": 296.073
+            },
+            "throughput_mbps": 1.878,
+            "elapsed_s": 0.6078,
+            "meta_ms": 2.408,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.6078
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 80.35,
+              "p50": 342.9,
+              "p95": 415.867,
+              "p99": 416.751,
+              "max": 416.972,
+              "mean": 303.462
+            },
+            "throughput_mbps": 1.856,
+            "elapsed_s": 0.6193,
+            "meta_ms": 0.008,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.6193
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 73.71,
+              "p50": 337.982,
+              "p95": 411.049,
+              "p99": 412.989,
+              "max": 413.474,
+              "mean": 298.898
+            },
+            "throughput_mbps": 1.848,
+            "elapsed_s": 0.6153,
+            "meta_ms": 2.407,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.6153
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 40.485,
+              "p50": 304.769,
+              "p95": 378.699,
+              "p99": 380.155,
+              "max": 380.519,
+              "mean": 265.228
+            },
+            "throughput_mbps": 1.849,
+            "elapsed_s": 0.5816,
+            "meta_ms": 2.361,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.5816
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 12.59,
+            "p50": 13.36,
+            "p95": 13.62,
+            "p99": 13.65,
+            "max": 13.65,
+            "mean": 13.2
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.514,
+            "p50": 3.937,
+            "p95": 4.333,
+            "p99": 4.398,
+            "max": 4.414,
+            "mean": 3.916
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.351,
+            "p50": 5.602,
+            "p95": 6.513,
+            "p99": 6.637,
+            "max": 6.668,
+            "mean": 5.823
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 2.992,
+            "p50": 3.711,
+            "p95": 4.456,
+            "p99": 4.466,
+            "max": 4.469,
+            "mean": 3.723
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 4.864,
+            "p50": 5.92,
+            "p95": 6.024,
+            "p99": 6.037,
+            "max": 6.041,
+            "mean": 5.64
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 1.724,
+          "p50": 2.188,
+          "p95": 2.741,
+          "p99": 2.989,
+          "max": 3.513,
+          "mean": 2.22
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 1.696,
+          "p50": 2.15,
+          "p95": 2.687,
+          "p99": 2.94,
+          "max": 3.468,
+          "mean": 2.184
+        },
+        "ws_upgrade_ms": 2.214,
+        "pty_throughput_mbps_raw": 1.878,
+        "pty_first_byte_ms_raw": 2.408,
+        "pty_throughput_mbps_framed": 1.856,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 179,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "pass",
+          "eof_ms": 3.38,
+          "errors": []
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": false,
+          "detail": "本 profile 的代理不丢流水线字节（或被测路径直连），未复现。"
+        },
+        {
+          "id": "F3_relay_throughput_ceiling",
+          "severity": "info",
+          "found": true,
+          "detail": "4 KiB/chunk + 2 ms 延迟（模拟 relayed 路径）下测得吞吐上限 ~2 MB/s，这是 relay 侧人类可感知的分界线（见 reports 数字）。"
+        }
+      ],
+      "wall_clock_s": 49.0
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "lossy",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:32:48+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "lossy",
+        "buf_size": 65536,
+        "lossy": true,
+        "listen_port": 45683,
+        "stats": {
+          "tunnels": 45,
+          "up_bytes": 4224259,
+          "down_bytes": 3298248,
+          "connect_errors": 0,
+          "discarded_bytes": 260,
+          "relay_chunks": 842
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 1.155,
+            "p50": 1.678,
+            "p95": 2.209,
+            "p99": 2.433,
+            "max": 2.947,
+            "mean": 1.72
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 1.131,
+            "p50": 1.653,
+            "p95": 2.167,
+            "p99": 2.398,
+            "max": 2.912,
+            "mean": 1.688
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 4.95,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 6.04,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 10.92,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-21f63e",
+                "last_seq": 42,
+                "ptys": 5
+              },
+              "ms": 8.43
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 5.92,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-6"
+              },
+              "ms": 11.59,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 2.13,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 173,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.415,
+          "inter_event_ms": {
+            "n": 172,
+            "min": 161.609,
+            "p50": 263.306,
+            "p95": 267.272,
+            "p99": 269.594,
+            "max": 270.008,
+            "mean": 263.0
+          },
+          "elapsed_s": 45.24
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 14.225,
+              "p50": 19.746,
+              "p95": 22.909,
+              "p99": 23.237,
+              "max": 23.319,
+              "mean": 19.466
+            },
+            "throughput_mbps": 45.997,
+            "elapsed_s": 0.0363,
+            "meta_ms": 0.008,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0363
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 12.823,
+              "p50": 28.426,
+              "p95": 42.937,
+              "p99": 43.742,
+              "max": 43.943,
+              "mean": 28.663
+            },
+            "throughput_mbps": 24.637,
+            "elapsed_s": 0.0538,
+            "meta_ms": 0.009,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0538
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 10.916,
+              "p50": 15.919,
+              "p95": 18.196,
+              "p99": 18.928,
+              "max": 19.111,
+              "mean": 15.524
+            },
+            "throughput_mbps": 57.891,
+            "elapsed_s": 0.0286,
+            "meta_ms": 0.117,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0286
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 9.005,
+              "p50": 16.061,
+              "p95": 16.818,
+              "p99": 17.021,
+              "max": 17.072,
+              "mean": 15.429
+            },
+            "throughput_mbps": 44.404,
+            "elapsed_s": 0.0319,
+            "meta_ms": 0.01,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0319
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 12.95,
+            "p50": 13.17,
+            "p95": 14.65,
+            "p99": 14.78,
+            "max": 14.81,
+            "mean": 13.64
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.722,
+            "p50": 4.927,
+            "p95": 5.137,
+            "p99": 5.165,
+            "max": 5.173,
+            "mean": 4.614
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.866,
+            "p50": 7.026,
+            "p95": 7.722,
+            "p99": 7.809,
+            "max": 7.83,
+            "mean": 7.0
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "fail",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 0
+          },
+          "first_response_ms": {
+            "n": 0
+          },
+          "errors": 5,
+          "error_notes": [
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out",
+            "TimeoutError: timed out"
+          ]
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 1.155,
+          "p50": 1.678,
+          "p95": 2.209,
+          "p99": 2.433,
+          "max": 2.947,
+          "mean": 1.72
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 1.131,
+          "p50": 1.653,
+          "p95": 2.167,
+          "p99": 2.398,
+          "max": 2.912,
+          "mean": 1.688
+        },
+        "ws_upgrade_ms": 2.13,
+        "pty_throughput_mbps_raw": 45.997,
+        "pty_first_byte_ms_raw": 0.008,
+        "pty_throughput_mbps_framed": 24.637,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 179,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "pass",
+          "eof_ms": 1.56,
+          "errors": []
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": true,
+          "detail": "客户端若在 CONNECT 之后不等 200 就发首个请求（乐观流水线），朴素代理会把已读进缓冲区的多余字节丢掉，请求永久挂起。本文档测的 5 次全部 timeout。",
+          "mitigation": "客户端必须等 CONNECT 200；dart:io HttpClient 默认就是等（见 Dart 探针注释）。"
+        }
+      ],
+      "wall_clock_s": 72.2
+    },
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "nohalf",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:34:00+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45975,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "nohalf",
+        "buf_size": 65536,
+        "propagate_halfclose": false,
+        "listen_port": 45835,
+        "stats": {
+          "tunnels": 45,
+          "up_bytes": 4224519,
+          "down_bytes": 3300608,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 848
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "endpoint": "GET /ping",
+          "auth_required": false,
+          "requests": 200,
+          "ok": 200,
+          "errors": 0,
+          "latency_ms": {
+            "n": 200,
+            "min": 1.268,
+            "p50": 1.676,
+            "p95": 2.257,
+            "p99": 2.681,
+            "max": 3.353,
+            "mean": 1.725
+          },
+          "ttfb_ms": {
+            "n": 200,
+            "min": 1.246,
+            "p50": 1.635,
+            "p95": 2.212,
+            "p99": 2.553,
+            "max": 3.325,
+            "mean": 1.695
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 8.14,
+              "http_status": 200
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 8.78,
+              "http_status": 401
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 13.88,
+              "http_status": 404
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-5d7591",
+                "last_seq": 42,
+                "ptys": 6
+              },
+              "ms": 7.86
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 7.72,
+              "http_status": 409
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-7"
+              },
+              "ms": 16.89,
+              "http_status": 200
+            }
+          },
+          "used_stub_auth": true,
+          "real_psk_derivation_verified": false,
+          "auth_note": "sim 用的是本地 stub token（--token p0b-sim-token），本层只证明『Bearer 头能原样穿过 CONNECT 隧道并按 401/409/404 语义正确回读』；真正的 psk→bearer 派生（rzv::derive_bearer）必须在真机/真 motifd 上对拍，见 docs/p0/ios-p0b-runbook.md 第 3 节。"
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 45.0,
+          "upgrade_ms": 1.781,
+          "ping_interval_s": 20.0,
+          "ping_observed": 2,
+          "ping_expected_by_window": 2,
+          "ping_window_too_short": false,
+          "ping_verdict": "pass",
+          "events": 172,
+          "pings": 2,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.465,
+          "inter_event_ms": {
+            "n": 171,
+            "min": 262.068,
+            "p50": 263.326,
+            "p95": 264.322,
+            "p99": 264.773,
+            "max": 265.199,
+            "mean": 263.317
+          },
+          "elapsed_s": 45.03
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 14.382,
+              "p50": 19.739,
+              "p95": 24.126,
+              "p99": 24.415,
+              "max": 24.487,
+              "mean": 20.203
+            },
+            "throughput_mbps": 42.902,
+            "elapsed_s": 0.0384,
+            "meta_ms": 0.015,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0384
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048592,
+            "sha256_up": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "sha256_down": "c193a723defa461170b0c13a1284a1e0cfab13eebd5388c49e86b89320fc0804",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 15.993,
+              "p50": 36.557,
+              "p95": 51.343,
+              "p99": 52.316,
+              "max": 52.559,
+              "mean": 35.813
+            },
+            "throughput_mbps": 20.402,
+            "elapsed_s": 0.0656,
+            "meta_ms": 0.386,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0656
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 1048576,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 11.091,
+              "p50": 18.469,
+              "p95": 21.476,
+              "p99": 21.909,
+              "max": 22.018,
+              "mean": 18.169
+            },
+            "throughput_mbps": 82.316,
+            "elapsed_s": 0.0302,
+            "meta_ms": 0.041,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0302
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 1048576,
+            "bytes_down": 1048576,
+            "wire_bytes_down": 74046,
+            "sha256_up": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "sha256_down": "349987d8950dde5286af08b0d0a8b3c5d2e74f8c6b6c1956ee38626e66b8001d",
+            "match": true,
+            "frame_size": 65536,
+            "frames": 16,
+            "frame_rtt_ms": {
+              "n": 16,
+              "min": 10.213,
+              "p50": 17.802,
+              "p95": 19.608,
+              "p99": 19.95,
+              "max": 20.036,
+              "mean": 17.166
+            },
+            "throughput_mbps": 44.399,
+            "elapsed_s": 0.0331,
+            "meta_ms": 0.186,
+            "compression_ratio": 14.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0331
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 3,
+          "observed_409": 3,
+          "recovered": 3,
+          "reattach_ms": {
+            "n": 3,
+            "min": 14.2,
+            "p50": 14.93,
+            "p95": 15.1,
+            "p99": 15.12,
+            "max": 15.12,
+            "mean": 14.75
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.34,
+            "p50": 4.487,
+            "p95": 4.666,
+            "p99": 4.679,
+            "max": 4.682,
+            "mean": 4.175
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.837,
+            "p50": 6.532,
+            "p95": 7.813,
+            "p99": 7.867,
+            "max": 7.88,
+            "mean": 6.735
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 3.523,
+            "p50": 4.413,
+            "p95": 4.774,
+            "p99": 4.782,
+            "max": 4.784,
+            "mean": 4.336
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 5.386,
+            "p50": 5.984,
+            "p95": 7.418,
+            "p99": 7.472,
+            "max": 7.486,
+            "mean": 6.322
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 200,
+          "min": 1.268,
+          "p50": 1.676,
+          "p95": 2.257,
+          "p99": 2.681,
+          "max": 3.353,
+          "mean": 1.725
+        },
+        "rpc_ttfb_ms": {
+          "n": 200,
+          "min": 1.246,
+          "p50": 1.635,
+          "p95": 2.212,
+          "p99": 2.553,
+          "max": 3.325,
+          "mean": 1.695
+        },
+        "ws_upgrade_ms": 1.781,
+        "pty_throughput_mbps_raw": 42.902,
+        "pty_first_byte_ms_raw": 0.015,
+        "pty_throughput_mbps_framed": 20.402,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 11,
+        "server_events_sent": 178,
+        "server_pings_sent": 2,
+        "server_pongs_recv": 2,
+        "server_pty_conns": 4,
+        "server_pty_bytes_up": 4194304,
+        "server_pty_bytes_down": 4194304,
+        "server_401": 1,
+        "server_409": 4
+      },
+      "checks": {
+        "close_semantics": {
+          "status": "fail",
+          "eof_ms": null,
+          "errors": [
+            "no EOF within 2.0s（半关闭未传播，代理把 close 吞了）"
+          ]
+        }
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "findings": [
+        {
+          "id": "F1_pipelining_breaks_on_naive_proxy",
+          "severity": "medium",
+          "found": false,
+          "detail": "本 profile 的代理不丢流水线字节（或被测路径直连），未复现。"
+        },
+        {
+          "id": "F4_half_close_not_propagated",
+          "severity": "medium",
+          "found": true,
+          "detail": "服务端 `Connection: close` 后客户端等不到 EOF（代理未 shutdown(SHUT_WR)），按 EOF 判结束的读取方会挂到超时。",
+          "mitigation": "客户端按 Content-Length/chunked 判正文结束，不依赖 EOF；代理实现必须传播半关闭。"
+        }
+      ],
+      "wall_clock_s": 48.6
+    }
+  ],
+  "summary": {
+    "direct": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 0.608,
+      "rtt_p95": 0.941,
+      "raw_mbps": 52.703,
+      "framed_mbps": 32.277,
+      "pipelined_ok": null,
+      "close_semantics": "pass",
+      "findings": []
+    },
+    "standard": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.516,
+      "rtt_p95": 2.072,
+      "raw_mbps": 55.738,
+      "framed_mbps": 32.429,
+      "pipelined_ok": "pass",
+      "close_semantics": "pass",
+      "findings": []
+    },
+    "tinybuf": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.634,
+      "rtt_p95": 2.317,
+      "raw_mbps": 7.34,
+      "framed_mbps": 14.349,
+      "pipelined_ok": "pass",
+      "close_semantics": "pass",
+      "findings": [
+        "F2_small_read_buffer"
+      ]
+    },
+    "laggy": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 2.188,
+      "rtt_p95": 2.741,
+      "raw_mbps": 1.878,
+      "framed_mbps": 1.856,
+      "pipelined_ok": "pass",
+      "close_semantics": "pass",
+      "findings": [
+        "F3_relay_throughput_ceiling"
+      ]
+    },
+    "lossy": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.678,
+      "rtt_p95": 2.209,
+      "raw_mbps": 45.997,
+      "framed_mbps": 24.637,
+      "pipelined_ok": "fail",
+      "close_semantics": "pass",
+      "findings": [
+        "F1_pipelining_breaks_on_naive_proxy"
+      ]
+    },
+    "nohalf": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 1.676,
+      "rtt_p95": 2.257,
+      "raw_mbps": 42.902,
+      "framed_mbps": 20.402,
+      "pipelined_ok": "pass",
+      "close_semantics": "fail",
+      "findings": [
+        "F4_half_close_not_propagated"
+      ]
+    }
+  }
+}
