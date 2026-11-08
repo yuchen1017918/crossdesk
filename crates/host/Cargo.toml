@@ -1,0 +1,25 @@
+[package]
+name = "crossdesk-host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Host-side infrastructure: (service, realm) exact-slot registry + LIFO dispose stack"
+
+# 注意：本 crate **故意不依赖** cordis-rs。
+# 理由见 docs/plan-v3.md §2.1：cordis 是 pre-1.0 且明确会 breaking，业务不应直接吃 FiberHandle。
+# cordis 的绑定放在 `cordis_bridge`（默认关闭的 feature），等在有 1.88 工具链的机器上
+# 用真实 0.11 API 编译对齐后再启用 —— 避免把未验证的 API 猜测写死进主路径。
+[dependencies]
+anyhow.workspace = true
+tracing.workspace = true
+tokio = { workspace = true }
+
+[features]
+default = []
+# 启用后才引入 cordis；未验证签名前保持关闭
+cordis = ["dep:cordis-rs"]
+
+[dependencies.cordis-rs]
+workspace = true
+optional = true
