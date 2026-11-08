@@ -1,0 +1,28 @@
+[workspace]
+resolver = "2"
+members = ["crates/host", "crates/mesh", "crates/workbench", "crates/motif-probe"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.88"          # cordis-rs 0.11 要求；netbird-embed 只需 1.85
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+
+[workspace.dependencies]
+cordis-rs   = "0.11"
+cordis-core = "0.6"
+netbird-embed = "=0.3.1"       # pin：单人维护，禁止漂移（docs/design/mesh-fork-surface.md）
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+
+# fork 预案占位（启用时取消注释并指向本地 vendor）
+# [patch.crates-io]
+# netbird-embed = { path = "vendor/netbird-embed" }
+
+[profile.release]
+strip = "symbols"              # 等价于 -C strip；Go 侧另有 -ldflags="-s -w"
+lto = "thin"
+codegen-units = 1
