@@ -1,0 +1,26 @@
+[package]
+name = "motif-probe"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "P0-A 对拍器：经 mesh proxy 打 motifd 的 /ping 与 /rpc/session.list，输出 JSON 报告"
+
+[[bin]]
+name = "motif-probe"
+path = "src/main.rs"
+
+[features]
+default = []
+# 启用后 `--with-mesh` 会在进程内起 NetBird（依赖 Go 工具链 + 平台 gcc），
+# 默认关闭，保证 `cargo test -p motif-probe` 在没有 Go 的机器上也能跑。
+mesh = ["dep:crossdesk-mesh"]
+
+[dependencies]
+anyhow.workspace = true
+# motifd 的网络监听**强制 TLS**（`--listen` 自动配自签证书 + pk pin），
+# 所以探针必须能跑 https。只引 rustls，不引 reqwest（体积/依赖纪律见 http.rs 顶部注释）。
+rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12", "logging"] }
+serde.workspace = true
+serde_json.workspace = true
+crossdesk-mesh = { path = "../mesh", optional = true }
