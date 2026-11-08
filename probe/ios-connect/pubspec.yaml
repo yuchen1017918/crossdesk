@@ -1,0 +1,25 @@
+name: ios_connect_probe
+description: Crossdesk P0-B —— iOS userspace netbird CONNECT 承载能力探针（B1–B4）
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # 只用来算 sha256（B3 的 1MB 双向校验）；不想引第三方包时可换成内置实现。
+  crypto: ^3.0.3
+  # iOS overlay 客户端。版本与 plan-v3 §2.3 对齐；升级时只需改 netbird_bridge.dart。
+  flutter_netbird: ^1.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
