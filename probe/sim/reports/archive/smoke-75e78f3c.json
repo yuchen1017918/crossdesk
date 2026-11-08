@@ -1,0 +1,426 @@
+{
+  "schema": "crossdesk.p0b.probe/1",
+  "tag": "smoke",
+  "run_id": "smoke-75e78f3c",
+  "generated_at": "2026-11-08T15:27:07+08:00",
+  "harness": {
+    "kind": "sim",
+    "name": "python3",
+    "python": "3.10.12",
+    "os": "Linux-6.18.33.2-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "cpu_count": 12
+  },
+  "config": {
+    "b1_requests": 5,
+    "b2_seconds": 3.0,
+    "b3_bytes": 65536,
+    "b3_frame": 16384,
+    "b3_payloads": [
+      "random",
+      "tui"
+    ],
+    "b4_cycles": 1,
+    "ping_interval_s": 20.0,
+    "token_configured": true
+  },
+  "profiles": [
+    {
+      "schema": "crossdesk.p0b.probe/1",
+      "profile": "standard",
+      "profile_kind": "connect",
+      "generated_at": "2026-11-08T15:27:07+08:00",
+      "target": {
+        "host": "127.0.0.1",
+        "port": 45289,
+        "motifd_version": "sim-0.9.0"
+      },
+      "proxy": {
+        "name": "standard",
+        "buf_size": 65536,
+        "listen_port": 45473,
+        "stats": {
+          "tunnels": 32,
+          "up_bytes": 268407,
+          "down_bytes": 213765,
+          "connect_errors": 0,
+          "discarded_bytes": 0,
+          "relay_chunks": 126
+        },
+        "note": "字节透明中继；up/down 为隧道内净载荷"
+      },
+      "acceptance": {
+        "B1_ping": {
+          "status": "pass",
+          "requests": 5,
+          "ok": 5,
+          "errors": 0,
+          "latency_ms": {
+            "n": 5,
+            "min": 2.096,
+            "p50": 2.319,
+            "p95": 3.01,
+            "p99": 3.137,
+            "max": 3.169,
+            "mean": 2.429
+          },
+          "ttfb_ms": {
+            "n": 5,
+            "min": 2.064,
+            "p50": 2.289,
+            "p95": 2.959,
+            "p99": 3.085,
+            "max": 3.117,
+            "mean": 2.391
+          },
+          "versions": [
+            "sim-0.9.0"
+          ],
+          "error_samples": []
+        },
+        "B1p_auth_session": {
+          "status": "pass",
+          "passed": 6,
+          "total": 6,
+          "checks": {
+            "session_list_bearer_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "sessions": 1
+              },
+              "ms": 10.61
+            },
+            "session_list_no_bearer_401": {
+              "ok": true,
+              "detail": {
+                "status": 401,
+                "body": "missing or invalid Bearer token"
+              },
+              "ms": 11.85
+            },
+            "unknown_method_404": {
+              "ok": true,
+              "detail": {
+                "status": 404,
+                "code": -32601
+              },
+              "ms": 19.46
+            },
+            "attach_returns_session_header": {
+              "ok": true,
+              "detail": {
+                "sid_prefix": "sid-4ed94c",
+                "last_seq": 42,
+                "ptys": 1
+              },
+              "ms": 13.58
+            },
+            "pty_create_without_session_409": {
+              "ok": true,
+              "detail": {
+                "status": 409,
+                "message": "NotAttached"
+              },
+              "ms": 9.34
+            },
+            "pty_create_with_session_200": {
+              "ok": true,
+              "detail": {
+                "status": 200,
+                "pty_id": "pty-2"
+              },
+              "ms": 21.09
+            }
+          }
+        },
+        "B2_events_ws": {
+          "status": "pass",
+          "duration_s": 3.0,
+          "upgrade_ms": 3.724,
+          "events": 13,
+          "pings": 0,
+          "seq_gaps": 0,
+          "max_gap": 0,
+          "close_code": null,
+          "reconnects": 0,
+          "errors": [],
+          "first_event_ms": 0.735,
+          "inter_event_ms": {
+            "n": 12,
+            "min": 263.051,
+            "p50": 263.948,
+            "p95": 265.279,
+            "p99": 265.463,
+            "max": 265.509,
+            "mean": 264.138
+          },
+          "elapsed_s": 3.17
+        },
+        "B3_pty_bidirectional": {
+          "random_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65536,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 5.597,
+              "p50": 6.234,
+              "p95": 6.382,
+              "p99": 6.382,
+              "max": 6.382,
+              "mean": 6.112
+            },
+            "throughput_mbps": 65.255,
+            "elapsed_s": 0.0074,
+            "meta_ms": 0.029,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0074
+          },
+          "random_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65540,
+            "sha256_up": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "sha256_down": "0499736fc5ec45e42cd515c03c91673179b5e433996d3fc16fc769e49d5293a5",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 6.415,
+              "p50": 6.557,
+              "p95": 7.035,
+              "p99": 7.087,
+              "max": 7.1,
+              "mean": 6.657
+            },
+            "throughput_mbps": 70.706,
+            "elapsed_s": 0.0079,
+            "meta_ms": 0.177,
+            "compression_ratio": 1.0,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.0079
+          },
+          "tui_legacy_raw": {
+            "status": "pass",
+            "mode": "legacy-raw",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 65536,
+            "sha256_up": "35396b59531ecb062b763d703c7cc894fb8127bbd80023c51e2d4b48776a90cb",
+            "sha256_down": "35396b59531ecb062b763d703c7cc894fb8127bbd80023c51e2d4b48776a90cb",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 5.509,
+              "p50": 7.25,
+              "p95": 7.739,
+              "p99": 7.803,
+              "max": 7.819,
+              "mean": 6.957
+            },
+            "throughput_mbps": 23.195,
+            "elapsed_s": 0.0085,
+            "meta_ms": 0.126,
+            "compression_ratio": null,
+            "errors": [],
+            "meta": {
+              "since": 0
+            },
+            "total_elapsed_s": 0.0085
+          },
+          "tui_framed_zlib": {
+            "status": "pass",
+            "mode": "framed-zlib",
+            "bytes_up": 65536,
+            "bytes_down": 65536,
+            "wire_bytes_down": 5389,
+            "sha256_up": "35396b59531ecb062b763d703c7cc894fb8127bbd80023c51e2d4b48776a90cb",
+            "sha256_down": "35396b59531ecb062b763d703c7cc894fb8127bbd80023c51e2d4b48776a90cb",
+            "match": true,
+            "frame_size": 16384,
+            "frames": 4,
+            "frame_rtt_ms": {
+              "n": 4,
+              "min": 5.422,
+              "p50": 6.073,
+              "p95": 6.838,
+              "p99": 6.926,
+              "max": 6.948,
+              "mean": 6.129
+            },
+            "throughput_mbps": 29.707,
+            "elapsed_s": 0.008,
+            "meta_ms": 0.015,
+            "compression_ratio": 12.161,
+            "errors": [],
+            "meta": {
+              "since": 0,
+              "pty_frame": "v1",
+              "pty_compress": "zlib"
+            },
+            "total_elapsed_s": 0.008
+          },
+          "pty_not_found_should_404": {
+            "status": "pass",
+            "detail": "upgrade failed: HTTP/1.1 404 Not Found"
+          },
+          "status": "pass",
+          "passed": 4,
+          "total": 4
+        },
+        "B4_reconnect_409": {
+          "status": "pass",
+          "cycles": 1,
+          "observed_409": 1,
+          "recovered": 1,
+          "reattach_ms": {
+            "n": 1,
+            "min": 22.42,
+            "p50": 22.42,
+            "p95": 22.42,
+            "p99": 22.42,
+            "max": 22.42,
+            "mean": 22.42
+          },
+          "ws_409": 0,
+          "errors": []
+        }
+      },
+      "perf": {
+        "tunnel_wait_200": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": false,
+          "connect_ms": {
+            "n": 5,
+            "min": 6.511,
+            "p50": 7.342,
+            "p95": 9.369,
+            "p99": 9.678,
+            "max": 9.756,
+            "mean": 7.729
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 9.422,
+            "p50": 11.551,
+            "p95": 12.49,
+            "p99": 12.623,
+            "max": 12.656,
+            "mean": 11.382
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "tunnel_pipelined": {
+          "status": "pass",
+          "rounds": 5,
+          "pipelined": true,
+          "connect_ms": {
+            "n": 5,
+            "min": 6.143,
+            "p50": 7.241,
+            "p95": 9.348,
+            "p99": 9.587,
+            "max": 9.647,
+            "mean": 7.641
+          },
+          "first_response_ms": {
+            "n": 5,
+            "min": 0.0,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0,
+            "mean": 0.0
+          },
+          "errors": 0,
+          "error_notes": []
+        },
+        "rpc_rtt_ms": {
+          "n": 5,
+          "min": 2.096,
+          "p50": 2.319,
+          "p95": 3.01,
+          "p99": 3.137,
+          "max": 3.169,
+          "mean": 2.429
+        },
+        "rpc_ttfb_ms": {
+          "n": 5,
+          "min": 2.064,
+          "p50": 2.289,
+          "p95": 2.959,
+          "p99": 3.085,
+          "max": 3.117,
+          "mean": 2.391
+        },
+        "ws_upgrade_ms": 3.724,
+        "pty_throughput_mbps_raw": 65.255,
+        "pty_first_byte_ms_raw": 0.029,
+        "pty_throughput_mbps_framed": 70.706,
+        "pty_compression_ratio_framed": 1.0
+      },
+      "events_observed": {
+        "server_ws_upgrades": 0,
+        "server_events_sent": 0,
+        "server_pings_sent": 0,
+        "server_pongs_recv": 0,
+        "server_pty_conns": 0,
+        "server_pty_bytes_up": 0,
+        "server_pty_bytes_down": 0,
+        "server_401": 0,
+        "server_409": 0
+      },
+      "verdict": {
+        "layers": {
+          "B1_ping": "pass",
+          "B1p_auth_session": "pass",
+          "B2_events_ws": "pass",
+          "B3_pty_bidirectional": "pass",
+          "B4_reconnect_409": "pass"
+        },
+        "overall": "pass"
+      },
+      "wall_clock_s": 9.6
+    }
+  ],
+  "summary": {
+    "standard": {
+      "overall": "pass",
+      "layers": {
+        "B1_ping": "pass",
+        "B1p_auth_session": "pass",
+        "B2_events_ws": "pass",
+        "B3_pty_bidirectional": "pass",
+        "B4_reconnect_409": "pass"
+      },
+      "rtt_p50": 2.319,
+      "rtt_p95": 3.01,
+      "raw_mbps": 65.255,
+      "framed_mbps": 70.706
+    }
+  }
+}
