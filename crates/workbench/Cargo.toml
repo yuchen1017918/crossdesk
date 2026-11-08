@@ -1,0 +1,11 @@
+[package]
+name = "crossdesk-workbench"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Workbench seam: attach/detach session model, Motif-shaped, transport-agnostic"
+
+[dependencies]
+anyhow.workspace = true
+tracing.workspace = true
