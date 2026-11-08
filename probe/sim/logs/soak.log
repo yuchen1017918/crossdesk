@@ -1,0 +1,43 @@
+nohup: ignoring input
+[bench] motifd-sim on 127.0.0.1:45049 token=set
+[bench] === profile standard ===
+[bench] standard: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (306.0s)
+[bench] === profile direct ===
+[bench] direct: pass {'B1_ping': 'pass', 'B1p_auth_session': 'pass', 'B2_events_ws': 'pass', 'B3_pty_bidirectional': 'pass', 'B4_reconnect_409': 'pass'} (304.4s)
+[bench] wrote /home/yuchen_wang/workspace/crossdesk/probe/sim/reports/soak-07d31f91.json (24458 bytes)
+{
+  "standard": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 1.821,
+    "rtt_p95": 2.386,
+    "raw_mbps": 49.087,
+    "framed_mbps": 31.427,
+    "pipelined_ok": "pass",
+    "close_semantics": "pass",
+    "findings": []
+  },
+  "direct": {
+    "overall": "pass",
+    "layers": {
+      "B1_ping": "pass",
+      "B1p_auth_session": "pass",
+      "B2_events_ws": "pass",
+      "B3_pty_bidirectional": "pass",
+      "B4_reconnect_409": "pass"
+    },
+    "rtt_p50": 0.744,
+    "rtt_p95": 1.033,
+    "raw_mbps": 64.781,
+    "framed_mbps": 20.772,
+    "pipelined_ok": null,
+    "close_semantics": "pass",
+    "findings": []
+  }
+}
