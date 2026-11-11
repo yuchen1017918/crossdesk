@@ -40,13 +40,14 @@ void main() {
   testWidgets('P0-B B1/B1p/B2/B3/B4 经 CONNECT 隧道', (tester) async {
     int? proxyPort;
     if (Env.useNetbird) {
+      final dir = Directory.systemTemp.path;
       proxyPort = await NetbirdBridge.bootstrap(
         managementUrl: Env.mgmt,
         setupKey: Env.setupKey,
-        psk: Env.psk,
+        configPath: '$dir/crossdesk_nb_config.json',
+        statePath: '$dir/crossdesk_nb_state.json',
       );
-      // 让 dart:io 的 HttpClient 也走隧道（与裸 socket 路径互为对照）
-      HttpOverrides.global = NetbirdBridge.httpOverrides(proxyPort);
+      // 1.0.5 没有 NetbirdHttpOverrides；本探针走裸 CONNECT（wire.dart），不需要它。
     } else {
       proxyPort = int.tryParse(
           const String.fromEnvironment('PROBE_PROXY_PORT', defaultValue: ''));
