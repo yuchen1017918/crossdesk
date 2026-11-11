@@ -72,6 +72,26 @@ jobs:
       # Development Team（实测报 "requires a selected Development Team with a
       # Provisioning Profile"），尽管 Xcode build 已经成功了 28 秒。
       # 所以这里只让 flutter 生成配置，真正的编译交给 xcodebuild 并把签名全关掉。
+      # 本地拿不到 flutter_netbird 的完整包（pub 的 33MB tarball 在国内镜像上被截断），
+      # 所以让 CI 把它真实的 Dart API 打出来，我们按真签名改 netbird_bridge.dart。
+      - name: 导出 flutter_netbird 真实 API
+        working-directory: probe/ios-connect
+        continue-on-error: true
+        run: |
+          set +e
+          flutter pub get >/dev/null 2>&1
+          F=$(find "$HOME/.pub-cache" -path '*flutter_netbird-1.0.5/lib/flutter_netbird.dart' | head -1)
+          echo "=== 源码文件: $F ==="
+          echo "--- 顶层类型 ---"
+          grep -nE '^(class|abstract class|enum|typedef|mixin|extension) ' "$F" | head -80
+          echo "--- 静态方法 ---"
+          grep -nE '^\s+static .*[\(;]' "$F" | head -60
+          echo "--- NetbirdAuth 构造 ---"
+          grep -nA6 'class NetbirdAuth' "$F" | head -20
+          echo "--- NetbirdConfig 构造 ---"
+          grep -nA18 'class NetbirdConfig' "$F" | head -34
+          echo "--- HttpOverrides / proxy 相关 ---"
+          grep -niE 'httpoverrides|Future<int>|startProxy|proxyPort' "$F" | head -25
       - name: 清空 DEVELOPMENT_TEAM（免费账号/CI 上都没有 team）
         working-directory: probe/ios-connect
         run: |
