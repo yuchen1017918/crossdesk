@@ -1,19 +1,30 @@
-// netbird_bridge.dart —— flutter_netbird 的**唯一**接触面
+// netbird_bridge.dart —— flutter_netbird 1.0.5 的**唯一**接触面
 //
-// ⚠️ 本文件是整套 Dart 探针里唯一需要按 flutter_netbird 实际签名校对的地方
-//    （约 40 行，全部用 ADAPT(n) 标出）。原因：交付本探针的机器上没有
-//    dart/flutter，且 pub.dev 不可达，无法拉到 1.0.5 的源码核对签名。
-//    因此这里**不声称可编译**，只给出契约形状。
+// 本文件已按 flutter_netbird **1.0.5 真实源码**对齐（2026-11-11，源码取自
+// GitHub Actions 的 pub-cache，见 .github/workflows/ios-dart.yml 的 API dump 步骤）。
 //
-// 契约（来自 plan-v3 §1 + 任务书）：
-//   1. initialize(NetbirdConfig)  —— 注入 management/relay/setup key
-//   2. up(NetbirdAuth)            —— 加入 overlay（iOS userspace，无 packet tunnel）
-//   3. startProxy()               —— 起本地 HTTP 代理，返回本地端口
-//   4. NetbirdHttpOverrides(port) —— 让 dart:io HttpClient 走该代理（CONNECT）
+// 真实 API（flutter_netbird.dart）：
+//   class NetbirdSDK                     —— factory 单例，`NetbirdSDK()` 直接拿
+//   int  initialize(NetbirdConfig)       —— **同步**，返回 rc（0 = 成功）
+//   Future<int> upAsync({NetbirdAuth?})  —— 异步版 up（iOS 上要用这个）
+//   Future<int> downAsync()
+//   Future<NetbirdFullStatus> getFullStatusAsync()
+//   Future<int> startProxy()             —— 只起代理，返回 rc
+//   Future<int> getProxyPort()           —— **端口要单独取**（startProxy 不返回端口）
+//   bool get isInitialized
+//
+// NetbirdConfig({deviceName, managementURL, configPath, statePath, logLevel, setupKey, ...})
+// NetbirdAuth({setupKey, jwtToken, privateKey})   ← **没有 psk 字段**
 //
 // 关键认知（决定验收口径）：iOS 上 netbird 是 **userspace**，不接管系统路由，
-// 所以 100.x 对 Socket.connect 不可达；只有打了 overrides 的 dart:io 请求能出去。
-// 这也是为什么 B1 必须"经 CONNECT 隧道"而不是直连 100.x。
+// 所以 100.x 对 `Socket.connect` 不可达；只有经 `getProxyPort()` 拿到的本地
+// CONNECT 端口才能出去。这也是 B1 必须"经 CONNECT 隧道"而不是直连 100.x 的原因。
+//
+// 注意：1.0.5 **没有** `NetbirdHttpOverrides` 这个类。本探针的裸 WS 路径用
+// `wire.dart` 自己的 Socket + 手工 CONNECT，因此不依赖任何 HttpOverrides。
+// 若将来要用 SDK 内置的 httpGet/httpPost（它们内部已走 proxy），那是另一条路。
+
+import 'dart:async';
 
 import 'package:flutter_netbird/flutter_netbird.dart';
 
@@ -21,81 +32,113 @@ import 'package:flutter_netbird/flutter_netbird.dart';
 class NetbirdBridge {
   NetbirdBridge._();
 
+  /// `NetbirdSDK()` 是 factory 单例（源码里 `static final _instance = NetbirdSDK._internal()`）。
+  static final NetbirdSDK _sdk = NetbirdSDK();
+
   static int? proxyPort;
 
-  /// 启动 netbird 并起本地代理，返回代理端口。
+  /// 初始化 → 加入 overlay → 起本地代理，返回代理端口。
   ///
-  /// [managementUrl] / [setupKey] / [psk] 来自配对材料（见 runbook §3）。
+  /// [configPath] / [statePath] 必须可写且持久：iOS 上没有它们每次都是新设备，
+  /// overlay IP 会漂（Windows 侧已实测过这个坑，见 plan-v3 A6）。
   static Future<int> bootstrap({
     required String managementUrl,
     required String setupKey,
-    required String psk,
-    String? relayUrl,
+    required String configPath,
+    required String statePath,
+    String deviceName = 'crossdesk-ios-probe',
     Duration timeout = const Duration(seconds: 30),
   }) async {
-    // ── ADAPT(1) ─────────────────────────────────────────────────────────
-    // NetbirdConfig 的字段名以 flutter_netbird 实际版本为准；下面按"至少需要
-    // management 地址 + setup key"建模。若字段名不同，只改这一处。
-    final config = NetbirdConfig(
-      managementUrl: managementUrl,
-      setupKey: setupKey,
-      relayUrl: relayUrl,
-    );
-    await FlutterNetbird.initialize(config);
-    // ─────────────────────────────────────────────────────────────────────
+    final rc = _sdk.initialize(NetbirdConfig(
+      deviceName: deviceName,
+      managementURL: managementUrl, // 注意是大写 URL
+      configPath: configPath,
+      statePath: statePath,
+      logLevel: 'info',
+    ));
+    if (rc != 0) {
+      throw StateError('NetbirdSDK.initialize 返回 $rc（非 0 即失败）');
+    }
 
-    // ── ADAPT(2) ─────────────────────────────────────────────────────────
-    // up() 的参数形态（psk？setupKey？deviceName？）需按版本核对。
-    await FlutterNetbird.up(NetbirdAuth(psk: psk));
-    // ─────────────────────────────────────────────────────────────────────
+    final upRc = await _sdk.upAsync(auth: NetbirdAuth(setupKey: setupKey));
+    if (upRc != 0) {
+      throw StateError('NetbirdSDK.upAsync 返回 $upRc（setup key / management URL 不对？）');
+    }
 
-    // 等 overlay 起来（后台存活观测也复用这个轮询函数）
+    // 等 overlay 进入连接态（B4 的后台存活观测复用同一函数）
     final deadline = DateTime.now().add(timeout);
-    var status = await FlutterNetbird.getFullStatus();
-    while (!_isConnected(status) && DateTime.now().isBefore(deadline)) {
+    var st = await _sdk.getFullStatusAsync();
+    while (!_isConnected(st) && DateTime.now().isBefore(deadline)) {
       await Future<void>.delayed(const Duration(milliseconds: 500));
-      status = await FlutterNetbird.getFullStatus();
+      st = await _sdk.getFullStatusAsync();
     }
-    if (!_isConnected(status)) {
-      throw StateError('netbird 未进入连接态：$status');
+    if (!_isConnected(st)) {
+      throw StateError('netbird ${timeout.inSeconds}s 内未进入连接态：${_describe(st)}');
     }
 
-    // ── ADAPT(3) ─────────────────────────────────────────────────────────
-    // startProxy() 的返回值（int? / 对象?）需核对；这里假定返回本地端口。
-    final proxy = await FlutterNetbird.startProxy();
-    proxyPort = proxy is int ? proxy : int.parse('$proxy');
-    // ─────────────────────────────────────────────────────────────────────
-    return proxyPort!;
+    final startRc = await _sdk.startProxy();
+    if (startRc != 0) {
+      throw StateError('NetbirdSDK.startProxy 返回 $startRc');
+    }
+    final port = await _sdk.getProxyPort();
+    if (port <= 0) {
+      throw StateError('NetbirdSDK.getProxyPort 返回 $port（代理没起来？）');
+    }
+
+    proxyPort = port;
+    return port;
   }
 
-  /// 交给 `HttpOverrides.global`，让 dart:io 的 HttpClient 走 CONNECT。
-  ///
-  /// ⚠️ 只影响 dart:io 的 HttpClient（以及内部用它的 WebSocket.connect）。
-  /// 本探针的裸 WS 路径用的是自己的 Socket + 手工 CONNECT，所以**不依赖**它；
-  /// 两者都测，才能区分"隧道不行"和"overrides 没接上"。
-  static HttpOverrides httpOverrides(int port) => NetbirdHttpOverrides(port);
-
-  /// 轮询连接态（B4 后台存活用）。
+  /// 轮询连接态（B4 后台存活用）。返回可直接进 JSON 报告的形状。
   static Future<Map<String, dynamic>> status() async {
-    final s = await FlutterNetbird.getFullStatus();
+    final s = await _sdk.getFullStatusAsync();
+    Map<String, dynamic> raw;
+    try {
+      raw = s.toJson();
+    } catch (_) {
+      raw = <String, dynamic>{'unparsed': '$s'};
+    }
     return <String, dynamic>{
-      'raw': '$s',
       'connected': _isConnected(s),
+      'raw': raw,
     };
   }
 
+  static bool get isInitialized => _sdk.isInitialized;
+
   static Future<void> down() async {
-    // ── ADAPT(4) ─────────────────────────────────────────────────────────
-    await FlutterNetbird.down();
-    // ─────────────────────────────────────────────────────────────────────
-    proxyPort = null;
+    try {
+      await _sdk.downAsync();
+    } finally {
+      proxyPort = null;
+    }
   }
 
-  static bool _isConnected(Object? status) {
-    // netbird 的状态是 JSON 字符串或结构体，字段名以版本为准。
-    final text = '$status'.toLowerCase();
-    return text.contains('"status":"connected"') ||
-        text.contains('connected=true') ||
-        text.contains('"connected":true');
+  /// 清掉 SDK 的全局状态（进程退出前调用，避免下一个用例拿到脏状态）。
+  static void cleanup() => _sdk.cleanup();
+
+  static bool _isConnected(NetbirdFullStatus s) {
+    // 优先看结构体字段；字段名不确定时退回字符串匹配。
+    // 注意 `contains('connected')` 会把 'disconnected' 也判真，所以必须精确比较。
+    try {
+      final j = s.toJson();
+      for (final key in const ['status', 'state', 'connectionStatus', 'connected']) {
+        if (!j.containsKey(key)) continue;
+        final v = '${j[key]}'.toLowerCase();
+        if (v == 'connected' || v == 'true') return true;
+        if (v == 'disconnected' || v == 'false' || v == 'idle') return false;
+      }
+    } catch (_) {}
+    final t = s.toString().toLowerCase();
+    if (t.contains('disconnected')) return false;
+    return t.contains('connected');
+  }
+
+  static String _describe(NetbirdFullStatus s) {
+    try {
+      return s.toJson().toString();
+    } catch (_) {
+      return '$s';
+    }
   }
 }
