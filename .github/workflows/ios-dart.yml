@@ -92,6 +92,10 @@ jobs:
           grep -nA18 'class NetbirdConfig' "$F" | head -34
           echo "--- HttpOverrides / proxy 相关 ---"
           grep -niE 'httpoverrides|Future<int>|startProxy|proxyPort' "$F" | head -25
+          echo "--- NetbirdSDK 实例方法签名 ---"
+          grep -nE '^  (Future|void|int|bool|String|Map|List|Stream|NetbirdSDK)[^;]*\(' "$F" | head -50
+          echo "--- 105-175 行原文（单例与构造） ---"
+          sed -n '105,175p' "$F"
       - name: 清空 DEVELOPMENT_TEAM（免费账号/CI 上都没有 team）
         working-directory: probe/ios-connect
         run: |
