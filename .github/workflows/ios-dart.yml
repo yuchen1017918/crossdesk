@@ -107,29 +107,22 @@ jobs:
           grep -c 'DEVELOPMENT_TEAM' "$PBX" || true
           sed -i '' -E 's/DEVELOPMENT_TEAM = [^;]+;/DEVELOPMENT_TEAM = "";/g' "$PBX"
           grep -n 'DEVELOPMENT_TEAM' "$PBX" | head -5 || true
-      - name: 编译（xcodebuild 直编，全关签名）
+      # 回到 flutter build：它会自动跑 pod install（把 flutter_netbird 的原生库链进来），
+      # 这一点是 xcodebuild 直编做不到的——第一版 ipa 因此缺 Frameworks/flutter_netbird.framework。
+      # 签名问题已由上一步「清空 DEVELOPMENT_TEAM」解决。
+      - name: 编译（flutter build ios，自动 pod install，不签名）
         working-directory: probe/ios-connect
         run: |
           flutter pub get
-          flutter precache --ios
-          flutter build ios --config-only --release --no-codesign || true
-          set -o pipefail
-          xcodebuild \
-            -workspace ios/Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath build/ios_dd \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            EXPANDED_CODE_SIGN_IDENTITY="" \
-            build | tail -40
+          flutter build ios --no-codesign --release
+          echo "--- 产物 ---"
+          ls -la build/ios/iphoneos/ || true
+          echo "--- 插件原生库是否链进来 ---"
+          ls build/ios/iphoneos/Runner.app/Frameworks/ || true
       - name: 产物信息
         working-directory: probe/ios-connect
         run: |
-          APP=$(find build/ios_dd -name 'Runner.app' -maxdepth 6 | head -1)
+          APP=build/ios/iphoneos/Runner.app
           echo "APP=$APP"
           ls -la "$APP" | head -20 || true
           du -sh "$APP" || true
@@ -138,5 +131,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Runner-nocodesign
-          path: probe/ios-connect/build/ios_dd/**/Runner.app
+          path: probe/ios-connect/build/ios/iphoneos/Runner.app
           if-no-files-found: warn
