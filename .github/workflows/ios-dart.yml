@@ -8,6 +8,10 @@
 # 免费额度：公开仓库不限；私有仓库 macOS runner 计费倍率高于 Linux，按需开启。
 name: ios-dart
 
+concurrency:
+  group: ios-dart-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     paths:
