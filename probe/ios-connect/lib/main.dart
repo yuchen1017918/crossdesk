@@ -127,12 +127,18 @@ class _ProbeAppState extends State<ProbeApp> with WidgetsBindingObserver {
     }
     setState(() => _status = 'netbird 启动中…');
     try {
+      // 1.0.5 的 NetbirdAuth 没有 psk 字段；身份就是 setup key。
+      // config/state 路径给 systemTemp：iOS 上同一进程内足够，
+      // 真正要跨重启持久化得换 path_provider 的 ApplicationDocuments。
+      final dir = Directory.systemTemp.path;
       final port = await NetbirdBridge.bootstrap(
         managementUrl: Env.netbirdMgmt,
         setupKey: Env.setupKey,
-        psk: Env.psk,
+        configPath: '$dir/crossdesk_nb_config.json',
+        statePath: '$dir/crossdesk_nb_state.json',
       );
-      HttpOverrides.global = NetbirdBridge.httpOverrides(port);
+      // 注意：1.0.5 没有 NetbirdHttpOverrides。裸 WS 路径（wire.dart）自己发 CONNECT，
+      // 不需要 HttpOverrides；SDK 内置的 httpGet/httpPost 是另一条路。
       setState(() {
         _proxyPort = port;
         _status = 'netbird 已连接，本地代理 127.0.0.1:$port';
